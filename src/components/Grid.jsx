@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./index.css";
+import { Button } from "react-bootstrap";
 
 export default class Grid extends Component {
   constructor(props) {
@@ -93,19 +94,57 @@ export default class Grid extends Component {
     this.setState({ grid: newGrid });
   };
 
-  componentDidMount() {
-    this.getRandomGrit();
+  start = () => {
     clearInterval(this.intervalId);
     this.intervalId = setInterval(this.game, this.state.speed);
+  };
+
+  stop = () => {
+    clearInterval(this.intervalId);
+  };
+
+  refrash = () => {
+    this.getRandomGrit();
+  };
+
+  componentDidMount() {
+    this.getRandomGrit();
+    this.start();
   }
 
   render() {
     const field = this.renderField(this.state.grid);
 
     return (
-      <table>
-        <tbody>{field}</tbody>
-      </table>
+      <div>
+        <div class="button">
+          <Button
+            style={{ marginRight: "10px" }}
+            onClick={this.start}
+            bsStyle="success"
+          >
+            Start
+          </Button>
+          <Button
+            style={{ marginRight: "10px" }}
+            onClick={this.stop}
+            bsStyle="danger"
+          >
+            Stop
+          </Button>
+          <Button
+            style={{ marginRight: "10px" }}
+            onClick={this.refrash}
+            bsStyle="primary"
+          >
+            Refrash
+          </Button>
+        </div>
+
+        <table>
+          <tbody>{field}</tbody>
+        </table>
+      </div>
     );
   }
 }

@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import "./index.css";
+import { Button } from "react-bootstrap";
 
 export default class Grid extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      play: false,
       speed: 100,
       size: 36,
       grid: [],
@@ -27,15 +29,34 @@ export default class Grid extends Component {
     this.setState({ grid });
   };
 
+  handleAlive = (row, col) => {
+    const grid = this.state.grid;
+    const newGrid = grid;
+    if (this.state.play === true) return;
+    if (grid[row][col] === 1) {
+      newGrid[row][col] = 0;
+    } else {
+      newGrid[row][col] = 1;
+    }
+
+    this.setState({ newGrid });
+  };
+
   renderField = grid => {
     const newGrid = grid.map((row, r) => {
       return (
         <tr key={r}>
-          {row.map((cell, i) => {
+          {row.map((cell, c) => {
             if (cell === 1) {
-              return <td key={i} className="alive" />;
+              return (
+                <td
+                  onClick={() => this.handleAlive(r, c)}
+                  key={c}
+                  className="alive"
+                />
+              );
             }
-            return <td key={i} />;
+            return <td onClick={() => this.handleAlive(r, c)} key={c} />;
           })}
         </tr>
       );
@@ -93,19 +114,79 @@ export default class Grid extends Component {
     this.setState({ grid: newGrid });
   };
 
-  componentDidMount() {
-    this.getRandomGrit();
+  start = () => {
     clearInterval(this.intervalId);
     this.intervalId = setInterval(this.game, this.state.speed);
+    this.setState({ play: true });
+  };
+
+  stop = () => {
+    clearInterval(this.intervalId);
+    this.setState({ play: false });
+  };
+
+  randomField = () => {
+    this.getRandomGrit();
+  };
+
+  clearField = () => {
+    const grid = [];
+    const size = this.state.size;
+
+    for (let r = 0; r <= size; r++) {
+      grid[r] = new Array(size);
+      for (let c = 0; c <= size; c++) {
+        grid[r][c] = 0;
+      }
+    }
+
+    this.stop();
+    this.setState({ grid });
+  };
+
+  componentDidMount() {
+    this.getRandomGrit();
   }
 
   render() {
     const field = this.renderField(this.state.grid);
-
+    const isPlay = this.state.play;
+    const buttonStartStop = !isPlay ? (
+      <Button
+        style={{ marginRight: "10px" }}
+        onClick={this.start}
+        bsStyle="success"
+      >
+        Start
+      </Button>
+    ) : (
+      <Button
+        style={{ marginRight: "10px" }}
+        onClick={this.stop}
+        bsStyle="danger"
+      >
+        Stop
+      </Button>
+    );
     return (
-      <table>
-        <tbody>{field}</tbody>
-      </table>
+      <div>
+        <div className="button">
+          {buttonStartStop}
+
+          <Button
+            style={{ marginRight: "10px" }}
+            onClick={this.randomField}
+            bsStyle="primary"
+          >
+            Random
+          </Button>
+          <Button onClick={this.clearField}>Clear</Button>
+        </div>
+
+        <table>
+          <tbody>{field}</tbody>
+        </table>
+      </div>
     );
   }
 }

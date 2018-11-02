@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import "./index.css";
 import { Button } from "react-bootstrap";
+import Tilt from "react-tilt";
+import Logo from "./Logo";
 
 export default class Grid extends Component {
   constructor(props) {
@@ -170,6 +172,19 @@ export default class Grid extends Component {
     );
     return (
       <div>
+        <Tilt
+          className="Tilt"
+          options={{ max: 25 }}
+          style={{ height: 50, width: 250 }}
+        >
+          <div className="Tilt-inner"> 👽 </div>
+        </Tilt>
+        <div className="totally-centered">
+          <Logo>
+            <div className="totally-centered">Game Of Life</div>
+          </Logo>
+        </div>
+
         <div className="button">
           {buttonStartStop}
 

@@ -5,8 +5,6 @@ import Routes from "./Routes";
 import "./App.css";
 import { LinkContainer } from "react-router-bootstrap";
 
-import Grid from "./components/Grid";
-
 class App extends Component {
   render() {
     return (

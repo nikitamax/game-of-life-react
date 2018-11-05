@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./index.css";
-import { Button } from "react-bootstrap";
+import { Button, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 import Tilt from "react-tilt";
 import Logo from "./Logo";
 
@@ -17,9 +17,8 @@ export default class Grid extends Component {
     };
   }
 
-  getRandomGrit = () => {
+  getRandomGrit = size => {
     const grid = [];
-    const size = this.state.size;
 
     for (let r = 0; r <= size; r++) {
       grid[r] = new Array(size);
@@ -128,7 +127,7 @@ export default class Grid extends Component {
   };
 
   randomField = () => {
-    this.getRandomGrit();
+    this.getRandomGrit(this.state.size);
   };
 
   clearField = () => {
@@ -146,8 +145,17 @@ export default class Grid extends Component {
     this.setState({ grid });
   };
 
+  reSize = e => {
+    this.setState({ size: +e.target.value });
+    this.getRandomGrit(+e.target.value);
+
+    console.log(this.state);
+  };
+
   componentDidMount() {
-    this.getRandomGrit();
+    this.getRandomGrit(this.state.size);
+
+    console.log(this.state);
   }
 
   render() {
@@ -175,7 +183,7 @@ export default class Grid extends Component {
         <Tilt
           className="Tilt"
           options={{ max: 25 }}
-          style={{ height: 50, width: 250 }}
+          style={{ height: 0, width: 250 }}
         >
           <div className="Tilt-inner"> 👽 </div>
         </Tilt>
@@ -196,6 +204,18 @@ export default class Grid extends Component {
             Random
           </Button>
           <Button onClick={this.clearField}>Clear</Button>
+          <FormGroup controlId="formControlsSelect">
+            <ControlLabel style={{ color: "white" }}>Choose size</ControlLabel>
+            <FormControl
+              onChange={this.reSize}
+              componentClass="select"
+              placeholder="select"
+            >
+              <option value="36">36x36</option>
+              <option value="16">16x16</option>
+              <option value="56">56x56</option>
+            </FormControl>
+          </FormGroup>
         </div>
 
         <table>

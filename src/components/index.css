@@ -12,7 +12,7 @@ table {
 table {
   margin: auto;
   display: table;
-  margin-top: 30px;
+  margin-top: 10px;
 }
 
 th,
@@ -22,24 +22,20 @@ td {
 }
 
 .alive {
-  background-color: greenyellow;
+  background-color: #00c851;
 }
 
 .button {
   margin: auto;
   display: table;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .tilt-root {
   height: 80px;
-  background-color: greenyellow;
+  background-color: #00c851;
   width: 200px;
-  background-image: -webkit-linear-gradient(
-    315deg,
-    #00c851 0%,
-    greenyellow 100%
-  );
+  background-image: -webkit-linear-gradient(315deg, #00c851 0%, #00c851 100%);
   background-image: linear-gradient(135deg, #00c851 0%, greenyellow 100%);
   transform-style: preserve-3d;
   will-change: transform;

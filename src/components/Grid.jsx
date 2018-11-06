@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import "./index.css";
-import { Button, FormControl } from "react-bootstrap";
+import { Button, FormControl, FormGroup, ControlLabel } from "react-bootstrap";
 import Tilt from "react-tilt";
 import Logo from "./Logo";
+import "react-input-range/lib/css/index.css";
 
 export default class Grid extends Component {
   constructor(props) {
@@ -160,28 +161,63 @@ export default class Grid extends Component {
       size: { width, height }
     });
     this.getRandomGrit(width, height);
-
-    console.log(this.state);
   };
 
   handleInputHeight = e => {
     this.setState({
       inputHeight: +e.target.value
     });
-    console.log(this.state);
   };
 
   handleInputWidth = e => {
     this.setState({
       inputWidth: +e.target.value
     });
-    console.log(this.state);
+  };
+
+  reSpeed = e => {
+    const levelSpeed = e.target.value;
+    switch (levelSpeed) {
+      case "0": {
+        this.setState({ speed: 100 });
+
+        break;
+      }
+      case "1": {
+        this.setState({ speed: 2000 });
+
+        break;
+      }
+      case "2": {
+        this.setState({ speed: 1000 });
+
+        break;
+      }
+      case "3": {
+        this.setState({ speed: 500 });
+
+        break;
+      }
+      case "4": {
+        this.setState({ speed: 100 });
+
+        break;
+      }
+      case "5": {
+        this.setState({ speed: 50 });
+
+        break;
+      }
+      case "6": {
+        this.setState({ speed: 10 });
+
+        break;
+      }
+    }
   };
 
   componentDidMount() {
     this.getRandomGrit(this.state.size.width, this.state.size.height);
-
-    console.log(this.state);
   }
 
   render() {
@@ -220,6 +256,30 @@ export default class Grid extends Component {
         </div>
 
         <div className="button">
+          <div style={{ display: "inline-block", marginRight: 10 }}>
+            <FormGroup controlId="formControlsSelect">
+              <FormControl
+                style={{
+                  width: 100,
+                  height: 35,
+                  display: "inline-block"
+                }}
+                onChange={this.reSpeed}
+                componentClass="select"
+                placeholder="select"
+              >
+                <option hidden value="0">
+                  Speed
+                </option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </FormControl>
+            </FormGroup>
+          </div>
           {buttonStartStop}
 
           <Button
@@ -263,7 +323,7 @@ export default class Grid extends Component {
           />
         </div>
 
-        <table>
+        <table style={{ marginTop: 20 }}>
           <tbody>{field}</tbody>
         </table>
       </div>

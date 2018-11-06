@@ -3,7 +3,6 @@ import "./index.css";
 import { Button, FormControl, FormGroup } from "react-bootstrap";
 import Tilt from "react-tilt";
 import Logo from "./Logo";
-import "react-input-range/lib/css/index.css";
 
 export default class Grid extends Component {
   constructor(props) {

@@ -2,9 +2,17 @@ import React, { Component } from "react";
 import { Jumbotron, Button } from "react-bootstrap";
 import Tilt from "react-tilt";
 import Logo from "./Logo";
+import YouTube from "react-youtube";
 
 export default class About extends Component {
   render() {
+    const opts = {
+      height: "420",
+      width: "840",
+      playerVars: {
+        autoplay: 1
+      }
+    };
     return (
       <div>
         <Tilt
@@ -35,6 +43,9 @@ export default class About extends Component {
             </Button>
           </p>
         </Jumbotron>
+        <div className="totally-centered">
+          <YouTube videoId="-FaqC4h5Ftg" opts={opts} onReady={this._onReady} />
+        </div>
       </div>
     );
   }

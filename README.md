@@ -1,2 +1,2 @@
 # game-of-life-react
-https://loving-roentgen-2f54b2.netlify.com/
+https://practical-hypatia-c30aeb.netlify.com/

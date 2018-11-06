@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./index.css";
-import { Button, FormGroup, ControlLabel, FormControl } from "react-bootstrap";
+import { Button, FormControl } from "react-bootstrap";
 import Tilt from "react-tilt";
 import Logo from "./Logo";
 
@@ -11,18 +11,20 @@ export default class Grid extends Component {
     this.state = {
       play: false,
       speed: 100,
-      size: 36,
+      inputWidth: 0,
+      inputHeight: 0,
+      size: { width: 36, height: 36 },
       grid: [],
       newGrid: []
     };
   }
 
-  getRandomGrit = size => {
+  getRandomGrit = (width, height) => {
     const grid = [];
 
-    for (let r = 0; r <= size; r++) {
-      grid[r] = new Array(size);
-      for (let c = 0; c <= size; c++) {
+    for (let r = 0; r <= height; r++) {
+      grid[r] = new Array(height);
+      for (let c = 0; c <= width; c++) {
         grid[r][c] = Math.random() <= 0.5 ? 1 : 0;
       }
     }
@@ -67,34 +69,35 @@ export default class Grid extends Component {
   };
 
   game = () => {
-    const size = this.state.size;
+    const width = this.state.size.width;
+    const height = this.state.size.height;
     const grid = this.state.grid;
     let newGrid = [];
-    for (let r = 0; r <= size; r++) {
-      newGrid[r] = new Array(size);
-      for (let c = 0; c <= size; c++) {
+    for (let r = 0; r <= height; r++) {
+      newGrid[r] = new Array(height);
+      for (let c = 0; c <= width; c++) {
         newGrid[r][c] = 0;
       }
     }
 
-    for (let r = 0; r <= size; r++) {
-      for (let c = 0; c <= size; c++) {
+    for (let r = 0; r <= height; r++) {
+      for (let c = 0; c <= width; c++) {
         let count = 0;
-        if (r - 1 < 0 || c - 1 < 0 || r + 1 > size || c + 1 > size) continue;
+        if (r - 1 < 0 || c - 1 < 0 || r + 1 > height || c + 1 > width) continue;
         else if (grid[r - 1][c - 1] === 1) count++;
-        if (r - 1 < 0 || c - 1 < 0 || r + 1 > size || c + 1 > size) continue;
+        if (r - 1 < 0 || c - 1 < 0 || r + 1 > height || c + 1 > width) continue;
         else if (grid[r - 1][c] === 1) count++;
-        if (r - 1 < 0 || c - 1 < 0 || r + 1 > size || c + 1 > size) continue;
+        if (r - 1 < 0 || c - 1 < 0 || r + 1 > height || c + 1 > width) continue;
         else if (grid[r - 1][c + 1] === 1) count++;
-        if (r - 1 < 0 || c - 1 < 0 || r + 1 > size || c + 1 > size) continue;
+        if (r - 1 < 0 || c - 1 < 0 || r + 1 > height || c + 1 > width) continue;
         else if (grid[r][c + 1] === 1) count++;
-        if (r - 1 < 0 || c - 1 < 0 || r + 1 > size || c + 1 > size) continue;
+        if (r - 1 < 0 || c - 1 < 0 || r + 1 > height || c + 1 > width) continue;
         else if (grid[r + 1][c + 1] === 1) count++;
-        if (r - 1 < 0 || c - 1 < 0 || r + 1 > size || c + 1 > size) continue;
+        if (r - 1 < 0 || c - 1 < 0 || r + 1 > height || c + 1 > width) continue;
         else if (grid[r + 1][c] === 1) count++;
-        if (r - 1 < 0 || c - 1 < 0 || r + 1 > size || c + 1 > size) continue;
+        if (r - 1 < 0 || c - 1 < 0 || r + 1 > height || c + 1 > width) continue;
         else if (grid[r + 1][c - 1] === 1) count++;
-        if (r - 1 < 0 || c - 1 < 0 || r + 1 > size || c + 1 > size) continue;
+        if (r - 1 < 0 || c - 1 < 0 || r + 1 > height || c + 1 > width) continue;
         else if (grid[r][c - 1] === 1) count++;
 
         if (grid[r][c] === 1) {
@@ -132,11 +135,12 @@ export default class Grid extends Component {
 
   clearField = () => {
     const grid = [];
-    const size = this.state.size;
+    const width = this.state.size.width;
+    const height = this.state.size.height;
 
-    for (let r = 0; r <= size; r++) {
-      grid[r] = new Array(size);
-      for (let c = 0; c <= size; c++) {
+    for (let r = 0; r <= height; r++) {
+      grid[r] = new Array(height);
+      for (let c = 0; c <= width; c++) {
         grid[r][c] = 0;
       }
     }
@@ -145,15 +149,37 @@ export default class Grid extends Component {
     this.setState({ grid });
   };
 
-  reSize = e => {
-    this.setState({ size: +e.target.value });
-    this.getRandomGrit(+e.target.value);
+  reSize = () => {
+    const width = this.state.inputWidth;
+    const height = this.state.inputHeight;
+    if (width > 400 || height > 400) {
+      alert("Select a smaller field size");
+      return;
+    }
+    this.setState({
+      size: { width, height }
+    });
+    this.getRandomGrit(width, height);
 
     console.log(this.state);
   };
 
+  handleInputHeight = e => {
+    this.setState({
+      inputHeight: +e.target.value
+    });
+    console.log(this.state);
+  };
+
+  handleInputWidth = e => {
+    this.setState({
+      inputWidth: +e.target.value
+    });
+    console.log(this.state);
+  };
+
   componentDidMount() {
-    this.getRandomGrit(this.state.size);
+    this.getRandomGrit(this.state.size.width, this.state.size.height);
 
     console.log(this.state);
   }
@@ -197,25 +223,44 @@ export default class Grid extends Component {
           {buttonStartStop}
 
           <Button
-            style={{ marginRight: "10px" }}
+            style={{ marginRight: 10 }}
             onClick={this.randomField}
             bsStyle="primary"
           >
             Random
           </Button>
           <Button onClick={this.clearField}>Clear</Button>
-          <FormGroup controlId="formControlsSelect">
-            <ControlLabel style={{ color: "white" }}>Choose size</ControlLabel>
-            <FormControl
-              onChange={this.reSize}
-              componentClass="select"
-              placeholder="select"
-            >
-              <option value="36">36x36</option>
-              <option value="16">16x16</option>
-              <option value="56">56x56</option>
-            </FormControl>
-          </FormGroup>
+
+          <Button
+            style={{ margin: 10 }}
+            bsStyle="warning"
+            onClick={this.reSize}
+          >
+            Change size
+          </Button>
+          <FormControl
+            style={{
+              width: 70,
+              height: 30,
+              display: "inline-block",
+              margin: 10
+            }}
+            type="text"
+            value={this.state.value}
+            placeholder="Height"
+            onChange={this.handleInputHeight}
+          />
+          <FormControl
+            style={{
+              width: 70,
+              height: 30,
+              display: "inline-block"
+            }}
+            type="text"
+            value={this.state.value}
+            placeholder="Width"
+            onChange={this.handleInputWidth}
+          />
         </div>
 
         <table>

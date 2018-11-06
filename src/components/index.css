@@ -42,6 +42,7 @@ td {
   transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);
 }
 .tilt-child {
+  border-radius: 5px;
   position: absolute;
   width: 50%;
   height: 50%;
@@ -52,6 +53,7 @@ td {
   background-color: #4285f4;
 }
 .totally-centered {
+  border-radius: 20px;
   font-weight: bold;
   color: white;
   margin-top: 8px;

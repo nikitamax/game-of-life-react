@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./index.css";
-import { Button, FormControl, FormGroup, ControlLabel } from "react-bootstrap";
+import { Button, FormControl, FormGroup } from "react-bootstrap";
 import Tilt from "react-tilt";
 import Logo from "./Logo";
 import "react-input-range/lib/css/index.css";
@@ -131,7 +131,7 @@ export default class Grid extends Component {
   };
 
   randomField = () => {
-    this.getRandomGrit(this.state.size);
+    this.getRandomGrit(this.state.size.width, this.state.size.height);
   };
 
   clearField = () => {
@@ -180,12 +180,10 @@ export default class Grid extends Component {
     switch (levelSpeed) {
       case "0": {
         this.setState({ speed: 100 });
-
         break;
       }
       case "1": {
         this.setState({ speed: 2000 });
-
         break;
       }
       case "2": {

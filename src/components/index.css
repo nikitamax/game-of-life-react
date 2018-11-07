@@ -21,14 +21,17 @@ td {
   height: 15px;
 }
 
-.alive {
+.alive-green {
   background-color: #00c851;
+}
+
+.alive-red {
+  background-color: red;
 }
 
 .button {
   margin: auto;
   display: table;
-  margin-top: 20px;
 }
 
 .tilt-root {

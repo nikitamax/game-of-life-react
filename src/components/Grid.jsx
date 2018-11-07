@@ -3,6 +3,7 @@ import "./index.css";
 import { Button, FormControl, FormGroup } from "react-bootstrap";
 import Tilt from "react-tilt";
 import Logo from "./Logo";
+import ColorToggle from "./ColorToggle";
 
 export default class Grid extends Component {
   constructor(props) {
@@ -15,7 +16,8 @@ export default class Grid extends Component {
       inputHeight: 0,
       size: { width: 36, height: 36 },
       grid: [],
-      newGrid: []
+      newGrid: [],
+      color: "green"
     };
   }
 
@@ -25,7 +27,16 @@ export default class Grid extends Component {
     for (let r = 0; r <= height; r++) {
       grid[r] = new Array(height);
       for (let c = 0; c <= width; c++) {
-        grid[r][c] = Math.random() <= 0.5 ? 1 : 0;
+        const random = Math.random();
+        if (random <= 0.5) {
+          grid[r][c] = 0;
+        }
+        if (random >= 0.5 && random <= 0.75) {
+          grid[r][c] = 1;
+        }
+        if (random >= 0.75) {
+          grid[r][c] = 2;
+        }
       }
     }
 
@@ -35,11 +46,13 @@ export default class Grid extends Component {
   handleAlive = (row, col) => {
     const grid = this.state.grid;
     const newGrid = grid;
+    const color = this.state.color;
     if (this.state.play === true) return;
-    if (grid[row][col] === 1) {
+    if (grid[row][col] === 1 || grid[row][col] === 2) {
       newGrid[row][col] = 0;
     } else {
-      newGrid[row][col] = 1;
+      if (color === "green") newGrid[row][col] = 1;
+      else newGrid[row][col] = 2;
     }
 
     this.setState({ newGrid });
@@ -55,7 +68,16 @@ export default class Grid extends Component {
                 <td
                   onClick={() => this.handleAlive(r, c)}
                   key={c}
-                  className="alive"
+                  className="alive-green"
+                />
+              );
+            }
+            if (cell === 2) {
+              return (
+                <td
+                  onClick={() => this.handleAlive(r, c)}
+                  key={c}
+                  className="alive-red"
                 />
               );
             }
@@ -82,35 +104,49 @@ export default class Grid extends Component {
 
     for (let r = 0; r <= height; r++) {
       for (let c = 0; c <= width; c++) {
-        let count = 0;
+        let countGreen = 0;
+        let countRed = 0;
         if (r - 1 < 0 || c - 1 < 0 || r + 1 > height || c + 1 > width) continue;
-        else if (grid[r - 1][c - 1] === 1) count++;
+        else if (grid[r - 1][c - 1] === 1) countGreen++;
+        else if (grid[r - 1][c - 1] === 2) countRed++;
         if (r - 1 < 0 || c - 1 < 0 || r + 1 > height || c + 1 > width) continue;
-        else if (grid[r - 1][c] === 1) count++;
+        else if (grid[r - 1][c] === 1) countGreen++;
+        else if (grid[r - 1][c] === 2) countRed++;
         if (r - 1 < 0 || c - 1 < 0 || r + 1 > height || c + 1 > width) continue;
-        else if (grid[r - 1][c + 1] === 1) count++;
+        else if (grid[r - 1][c + 1] === 1) countGreen++;
+        else if (grid[r - 1][c + 1] === 2) countRed++;
         if (r - 1 < 0 || c - 1 < 0 || r + 1 > height || c + 1 > width) continue;
-        else if (grid[r][c + 1] === 1) count++;
+        else if (grid[r][c + 1] === 1) countGreen++;
+        else if (grid[r][c + 1] === 2) countRed++;
         if (r - 1 < 0 || c - 1 < 0 || r + 1 > height || c + 1 > width) continue;
-        else if (grid[r + 1][c + 1] === 1) count++;
+        else if (grid[r + 1][c + 1] === 1) countGreen++;
+        else if (grid[r + 1][c + 1] === 2) countRed++;
         if (r - 1 < 0 || c - 1 < 0 || r + 1 > height || c + 1 > width) continue;
-        else if (grid[r + 1][c] === 1) count++;
+        else if (grid[r + 1][c] === 1) countGreen++;
+        else if (grid[r + 1][c] === 2) countRed++;
         if (r - 1 < 0 || c - 1 < 0 || r + 1 > height || c + 1 > width) continue;
-        else if (grid[r + 1][c - 1] === 1) count++;
+        else if (grid[r + 1][c - 1] === 1) countGreen++;
+        else if (grid[r + 1][c - 1] === 2) countRed++;
         if (r - 1 < 0 || c - 1 < 0 || r + 1 > height || c + 1 > width) continue;
-        else if (grid[r][c - 1] === 1) count++;
+        else if (grid[r][c - 1] === 1) countGreen++;
+        else if (grid[r][c - 1] === 2) countRed++;
 
-        if (grid[r][c] === 1) {
+        let count = countGreen + countRed;
+        if (grid[r][c] === 1 || grid[r][c] === 2) {
           if (count < 2) {
             newGrid[r][c] = 0;
           } else if (count === 2 || count === 3) {
-            newGrid[r][c] = 1;
+            if (countGreen > countRed) newGrid[r][c] = 1;
+            if (countGreen < countRed) newGrid[r][c] = 2;
+            if (countGreen === countRed)
+              newGrid[r][c] = Math.random() <= 0.5 ? 1 : 2;
           } else if (count > 3) {
             newGrid[r][c] = 0;
           }
         } else {
           if (count === 3) {
-            newGrid[r][c] = 1;
+            if (countGreen > countRed) newGrid[r][c] = 1;
+            else newGrid[r][c] = 2;
           }
         }
       }
@@ -213,6 +249,16 @@ export default class Grid extends Component {
     }
   };
 
+  colorToggle = () => {
+    const color = this.state.color;
+    if (color === "green") {
+      this.setState({ color: "red" });
+    } else {
+      this.setState({ color: "green" });
+    }
+    console.log(this.state);
+  };
+
   componentDidMount() {
     this.getRandomGrit(this.state.size.width, this.state.size.height);
   }
@@ -252,6 +298,10 @@ export default class Grid extends Component {
           </Logo>
         </div>
 
+        <div className="totally-centered">
+          <ColorToggle colorToggle={this.colorToggle} />
+        </div>
+
         <div className="button">
           <div style={{ display: "inline-block", marginRight: 10 }}>
             <FormGroup controlId="formControlsSelect">
@@ -289,7 +339,7 @@ export default class Grid extends Component {
           <Button onClick={this.clearField}>Clear</Button>
 
           <Button
-            style={{ margin: 10 }}
+            style={{ marginLeft: 10 }}
             bsStyle="warning"
             onClick={this.reSize}
           >
@@ -300,7 +350,7 @@ export default class Grid extends Component {
               width: 70,
               height: 30,
               display: "inline-block",
-              margin: 10
+              marginLeft: 10
             }}
             type="text"
             value={this.state.value}
@@ -311,7 +361,8 @@ export default class Grid extends Component {
             style={{
               width: 70,
               height: 30,
-              display: "inline-block"
+              display: "inline-block",
+              marginLeft: 10
             }}
             type="text"
             value={this.state.value}
@@ -320,7 +371,7 @@ export default class Grid extends Component {
           />
         </div>
 
-        <table style={{ marginTop: 20 }}>
+        <table style={{ marginTop: 10 }}>
           <tbody>{field}</tbody>
         </table>
       </div>
